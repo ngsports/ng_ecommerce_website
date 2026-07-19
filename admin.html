@@ -1,0 +1,256 @@
+/* ==========================================
+   NG SPORTS ADMIN PANEL
+   admin.js (Part 1)
+========================================== */
+
+import {
+    db,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    updateDoc,
+    deleteDoc,
+    getDoc
+} from "./firebase.js";
+
+/* ==========================================
+   Elements
+========================================== */
+
+const form = document.getElementById("productForm");
+const productContainer = document.getElementById("admin-products");
+
+/* ==========================================
+   Add Product
+========================================== */
+
+if (form) {
+
+    form.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
+        const product = {
+
+            name: document.getElementById("name").value.trim(),
+
+            category: document.getElementById("category").value,
+
+            brand: document.getElementById("brand")
+                ? document.getElementById("brand").value.trim()
+                : "",
+
+            price: Number(
+                document.getElementById("price").value
+            ),
+
+            stock: Number(
+                document.getElementById("stock").value
+            ),
+
+            image: document.getElementById("image").value.trim(),
+
+            description: document.getElementById("description").value.trim(),
+
+            createdAt: new Date()
+
+        };
+
+        try {
+
+            await addDoc(
+                collection(db, "products"),
+                product
+            );
+
+            alert("✅ Product Added Successfully");
+
+            form.reset();
+
+            loadProducts();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("❌ " + error.message);
+
+        }
+
+    });
+
+}
+
+/* ==========================================
+   Load Products
+========================================== */
+
+async function loadProducts() {
+
+    if (!productContainer) return;
+
+    productContainer.innerHTML = "<p>Loading...</p>";
+
+    const snapshot = await getDocs(
+        collection(db, "products")
+    );
+
+    productContainer.innerHTML = "";
+    snapshot.forEach((item) => {
+
+        const product = item.data();
+
+        productContainer.innerHTML += `
+
+        <div class="admin-product">
+
+            <img
+                src="${product.image}"
+                alt="${product.name}"
+                width="80">
+
+            <div class="admin-info">
+
+                <h3>${product.name}</h3>
+
+                <p><strong>Category:</strong> ${product.category}</p>
+
+                <p><strong>Brand:</strong> ${product.brand || "-"}</p>
+
+                <p><strong>Price:</strong> ₹${product.price}</p>
+
+                <p><strong>Stock:</strong> ${product.stock}</p>
+
+            </div>
+
+            <div class="admin-buttons">
+
+                <button
+                    class="edit-btn"
+                    onclick="editProduct('${item.id}')">
+
+                    <i class="fa-solid fa-pen"></i>
+                    Edit
+
+                </button>
+
+                <button
+                    class="delete-btn"
+                    onclick="removeProduct('${item.id}')">
+
+                    <i class="fa-solid fa-trash"></i>
+                    Delete
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+/* ==========================================
+   Edit Product
+========================================== */
+
+window.editProduct = async function (id) {
+
+    const productRef = doc(db, "products", id);
+
+    const snap = await getDoc(productRef);
+
+    if (!snap.exists()) {
+        alert("Product not found.");
+        return;
+    }
+
+    const data = snap.data();
+
+    const newPrice = prompt(
+        "Enter New Price",
+        data.price
+    );
+
+    if (newPrice === null) return;
+
+    try {
+
+        await updateDoc(productRef, {
+
+            price: Number(newPrice)
+
+        });
+
+        alert("✅ Product Updated");
+
+        loadProducts();
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+};
+
+/* ==========================================
+   Delete Product
+========================================== */
+
+window.removeProduct = async function (id) {
+
+    if (!confirm("Delete this product?")) return;
+
+    try {
+
+        await deleteDoc(
+            doc(db, "products", id)
+        );
+
+        alert("✅ Product Deleted");
+
+        loadProducts();
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+};
+
+/* ==========================================
+   Logout
+========================================== */
+
+window.logout = function () {
+
+    if (confirm("Logout Admin?")) {
+
+        window.location.href = "index.html";
+
+    }
+
+};
+
+/* ==========================================
+   Auto Refresh
+========================================== */
+
+loadProducts();
+
+setInterval(() => {
+
+    loadProducts();
+
+}, 10000);
+
+/* ==========================================
+   Admin Ready
+========================================== */
+
+console.log("NG SPORTS ADMIN PANEL READY");
