@@ -297,3 +297,70 @@ window.decreaseQty = decreaseQty;
 window.clearCart = clearCart;
 window.checkout = checkout;
 window.orderOnWhatsApp = orderOnWhatsApp;
+/* =====================================
+   Load Products From products.json
+===================================== */
+async function loadProducts() {
+
+    const productContainer = document.getElementById("product-list");
+
+    if (!productContainer) return;
+
+    try {
+
+        const response = await fetch("products.json");
+
+        const products = await response.json();
+
+        productContainer.innerHTML = "";
+
+        products.forEach(product => {
+
+            productContainer.innerHTML += `
+            
+            <div class="product-card">
+
+                <img src="${product.image}" alt="${product.name}">
+
+                <h3>${product.name}</h3>
+
+                <p class="price">₹${product.price}</p>
+
+                <p class="description">${product.description}</p>
+
+                <div class="product-buttons">
+
+                    <button onclick='addToCart(${JSON.stringify(product)})'>
+                        Add To Cart
+                    </button>
+
+                    <button onclick='viewProduct(${JSON.stringify(product)})'>
+                        View
+                    </button>
+
+                </div>
+
+            </div>
+
+            `;
+        });
+                 } catch (error) {
+
+        console.error("Products Load Error:", error);
+
+        productContainer.innerHTML =
+            "<p>Products failed to load.</p>";
+
+    }
+
+}
+
+/* ===========================
+Load Products On Home Page
+=========================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadProducts();
+
+});
