@@ -345,9 +345,9 @@ async function loadProducts() {
             `;
         });
                 
-      catch (error) {
-    console.error(error);
-    productContainer.innerHTML =
+         }  catch (error) {
+            console.error(error);
+          productContainer.innerHTML =
         "<p>Products failed to load.</p>";
 
     
