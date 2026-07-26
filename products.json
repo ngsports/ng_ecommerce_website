@@ -2,14 +2,14 @@
   {
     "id": 1,
     "name": "Red Cricket Leather Ball",
-    "price": 300rs,
+    "price": 300,
     "image": "red-ball.PNG",
     "description": "NG SPORTS Premium Red Cricket Ball. Premium quality leather ball with strong hand-stitched seam, excellent swing, bounce and grip. Suitable for 60+ overs, club matches and academy practice."
   },
   {
     "id": 2,
     "name": "White Cricket Leather Ball",
-    "price": 250rs,
+    "price": 250,
     "image": "white-ball.PNG",
     "description": "NG SPORTS Premium White Cricket Ball. High-quality leather ball designed for 20+ overs with consistent bounce, durable seam and long-lasting performance for practice and matches."
   }
