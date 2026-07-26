@@ -344,14 +344,18 @@ async function loadProducts() {
 
             `;
         });
-                 } catch (error) {
+                
+      catch (error) {
+    console.error(error);
+    productContainer.innerHTML =
+        "<p>Products failed to load.</p>";
 
-        console.error("Products Load Error:", error);
-
-        productContainer.innerHTML =
-            "<p>Products failed to load.</p>";
-
+    
     }
+        
+
+    
+        
 
 }
 
