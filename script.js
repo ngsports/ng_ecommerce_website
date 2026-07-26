@@ -315,7 +315,7 @@ async function loadProducts() {
         productContainer.innerHTML = "";
 
         products.forEach(product => {
-
+        console.log(product);
             productContainer.innerHTML += `
             
             <div class="product-card">
