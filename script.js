@@ -328,17 +328,13 @@ async function loadProducts() {
 
                 <p class="description">${product.description}</p>
 
-                <div class="product-buttons">
+    
+                
+        <div class="product-buttons">
+    <button>Add To Cart</button>
+    <button>View</button>
 
-                    <button onclick='addToCart(${JSON.stringify(product)})'>
-                        Add To Cart
-                    </button>
-
-                    <button onclick='viewProduct(${JSON.stringify(product)})'>
-                        View
-                    </button>
-
-                </div>
+       </div> 
 
             </div>
 
